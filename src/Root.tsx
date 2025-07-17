@@ -34,7 +34,7 @@ export const RemotionRoot: React.FC = () => {
       <Composition
       id="Full-video"
       component={FinalVideo}
-      durationInFrames={totalFrames}
+      durationInFrames={100 * 30} // 100 segundos * 30fps = 3000 frames
       fps={30}
       width={1080}
       height={1920}

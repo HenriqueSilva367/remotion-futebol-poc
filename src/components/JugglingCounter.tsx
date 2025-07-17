@@ -8,29 +8,29 @@ import {
   spring,
   interpolate,
   Audio,
+  Img,
 } from "remotion";
 
-export const JugglingCounter: React.FC<{
-  totalJuggles: number;
-}> = ({ totalJuggles }) => {
+export const JugglingCounter: React.FC<{ totalJuggles: number }> = ({
+  totalJuggles,
+}) => {
   const frame = useCurrentFrame();
   const { durationInFrames, fps } = useVideoConfig();
 
-  const secondsPerJuggle = 0.7; // ajusta como quiser (0.7 segundos por embaixadinha)
-const framesPerJuggle = secondsPerJuggle * fps;
+  // Define velocidade do contador (ajuste como quiser)
+  const secondsPerJuggle = 0.7;
+  const framesPerJuggle = secondsPerJuggle * fps;
 
-const count = Math.min(
-  Math.floor(frame / framesPerJuggle),
-  totalJuggles
-);
+  // Contagem baseada no tempo do vídeo
+  const count = Math.min(Math.floor(frame / framesPerJuggle), totalJuggles);
+
+  // Animação de entrada
   const scale = spring({
     frame,
     fps,
     from: 0,
     to: 1,
-    config: {
-      damping: 200,
-    },
+    config: { damping: 200 },
   });
 
   const opacity = interpolate(frame, [0, 30], [0, 1], {
@@ -38,8 +38,8 @@ const count = Math.min(
     extrapolateRight: "clamp",
   });
 
-  // IMAGEM APARECE APÓS 7 SEGUNDOS
-  const imageStart = 8 * fps; // 7 segundos convertido para frames
+  // Fade-in da logo após 7 segundos
+  const imageStart = 20 * fps;
   const imageOpacity = interpolate(
     frame,
     [imageStart, imageStart + 30],
@@ -47,8 +47,8 @@ const count = Math.min(
     { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
   );
 
-  // TEXTO "MVP Studium" APARECE NO FINAL (depois do fade da imagem)
-  const textStart = durationInFrames - 20; // Últimos 1 segundo
+  // Texto final (últimos 20 frames)
+  const textStart = durationInFrames - 20;
   const textOpacity = interpolate(
     frame,
     [textStart, durationInFrames],
@@ -57,14 +57,9 @@ const count = Math.min(
   );
 
   return (
-    <AbsoluteFill
-      style={{
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: "black",
-      }}
-    >
-      {/* VÍDEO (muted) */}
+    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", backgroundColor: "black" }}>
+      
+      {/* VÍDEO */}
       <OffthreadVideo
         src={staticFile("/videos/00.mp4")}
         muted
@@ -85,82 +80,64 @@ const count = Math.min(
         src={staticFile("/audios/musica-nova.mp3")}
         volume={interpolate(
           frame,
-          [
-            0,                  // início do vídeo
-            fps * 2,            // após 2 segundos (fade-in termina)
-            durationInFrames - fps * 2,  // começa fade-out 2 segundos antes do fim
-            durationInFrames    // final do vídeo
-          ],
-          [
-            0,  // volume 0 (início)
-            1,  // volume 100% após 2 segundos
-            1,  // mantém 100% até quase o fim
-            0   // volume 0 no fim (fade-out)
-          ],
-          {
-            extrapolateLeft: "clamp",
-            extrapolateRight: "clamp"
-          }
+          [0, 2 * fps, durationInFrames - 2 * fps, durationInFrames],
+          [0, 1, 1, 0],
+          { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
         )}
       />
 
-
-      {/* IMAGEM (aparece após 7 segundos) */}
-      <img
+      {/* LOGO (após 7 segundos) */}
+      <Img
         src={staticFile("/image/logo.png")}
         style={{
           position: "absolute",
-          top: 0,
-          left: -420,
-          width: 1920,
-          height: "auto",
+          top: 50,
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: 500,
           opacity: imageOpacity,
         }}
       />
 
-      {/* TEXTO (aparece apenas no final) */}
+      {/* TEXTO FINAL */}
       <div
         style={{
           position: "absolute",
-          top: 850,
+          bottom: 200,
           fontSize: 150,
           color: "white",
           fontWeight: "bold",
-          backgroundColor: "hsla(96, 100.00%, 38.00%, 0.00)",
-          padding: "10px 20px",
-          borderRadius: 15,
           opacity: textOpacity,
         }}
       >
         MVP Studium
       </div>
 
-      {/* CONTADOR COM FUNDO DE BOLA */}
+      {/* CONTADOR COM BOLA */}
       <div
         style={{
           position: "absolute",
-          top: 1700,
-          right: 50,
-          fontSize: 100,
-          color: "#5c6b74",
-          fontWeight: "bold",
-          textShadow: "0 0 10px white, 0 0 10px white", 
-          backgroundImage: `url(${staticFile("/image/bola-atual.png")})`,
+          top: 1600,
+          right: 80,
+          width: 180,
+          height: 180,
+          borderRadius: "50%",
+          backgroundImage: `url(${staticFile("/image/ball.png")})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
-          width: 150,
-          height: 150,
+          fontSize: 80,
+          fontWeight: "bold",
+          color: "white",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          borderRadius: "50%",
+          textShadow: "0 0 10px black",
           transform: `scale(${scale})`,
           opacity,
         }}
       >
         {count}
       </div>
-
     </AbsoluteFill>
   );
 };
