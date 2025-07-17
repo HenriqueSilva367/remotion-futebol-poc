@@ -17,7 +17,7 @@ export const JugglingCounter: React.FC<{
 
   const count = Math.min(
     Math.floor((frame / durationInFrames) * totalJuggles),
-    totalJuggles,
+    totalJuggles
   );
 
   const scale = spring({
@@ -43,6 +43,7 @@ export const JugglingCounter: React.FC<{
         backgroundColor: "black",
       }}
     >
+      {/* VÍDEO */}
       <OffthreadVideo
         src={staticFile("/videos/embaixadinha.mp4")}
         style={{
@@ -57,10 +58,40 @@ export const JugglingCounter: React.FC<{
         }}
       />
 
+      {/* IMAGEM SOBRE O VÍDEO */}
+      <img
+        src={staticFile("/image/logo.png")}
+        style={{
+          position: "absolute",
+          top: 0,
+          right: "center",
+          width: 1920,
+          height: "auto",
+          opacity: 0.3,
+        }}
+      />
+
+      {/* TEXTO: Nome e Título */}
       <div
         style={{
           position: "absolute",
-          top: 100,
+          top: 30,
+          fontSize: 60,
+          color: "white",
+          fontWeight: "bold",
+          backgroundColor: "rgba(0, 0, 0, 0)",
+          padding: "10px 20px",
+          borderRadius: 15,
+        }}
+      >
+        Número de embaixadinhas
+      </div>
+
+      {/* CONTADOR */}
+      <div
+        style={{
+          position: "absolute",
+          top: 200,
           fontSize: 150,
           color: "yellow",
           fontWeight: "bold",
