@@ -7,6 +7,7 @@ import {
   AbsoluteFill,
   spring,
   interpolate,
+  Audio,
 } from "remotion";
 
 export const JugglingCounter: React.FC<{
@@ -15,11 +16,13 @@ export const JugglingCounter: React.FC<{
   const frame = useCurrentFrame();
   const { durationInFrames, fps } = useVideoConfig();
 
-  const count = Math.min(
-    Math.floor((frame / durationInFrames) * totalJuggles),
-    totalJuggles
-  );
+  const secondsPerJuggle = 0.7; // ajusta como quiser (0.7 segundos por embaixadinha)
+const framesPerJuggle = secondsPerJuggle * fps;
 
+const count = Math.min(
+  Math.floor(frame / framesPerJuggle),
+  totalJuggles
+);
   const scale = spring({
     frame,
     fps,
@@ -35,6 +38,24 @@ export const JugglingCounter: React.FC<{
     extrapolateRight: "clamp",
   });
 
+  // IMAGEM APARECE APÓS 7 SEGUNDOS
+  const imageStart = 8 * fps; // 7 segundos convertido para frames
+  const imageOpacity = interpolate(
+    frame,
+    [imageStart, imageStart + 30],
+    [0, 1],
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+  );
+
+  // TEXTO "MVP Studium" APARECE NO FINAL (depois do fade da imagem)
+  const textStart = durationInFrames - 20; // Últimos 1 segundo
+  const textOpacity = interpolate(
+    frame,
+    [textStart, durationInFrames],
+    [0, 1],
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+  );
+
   return (
     <AbsoluteFill
       style={{
@@ -43,9 +64,10 @@ export const JugglingCounter: React.FC<{
         backgroundColor: "black",
       }}
     >
-      {/* VÍDEO */}
+      {/* VÍDEO (muted) */}
       <OffthreadVideo
-        src={staticFile("/videos/embaixadinha.mp4")}
+        src={staticFile("/videos/00.mp4")}
+        muted
         style={{
           width: 1080,
           height: 1920,
@@ -58,52 +80,87 @@ export const JugglingCounter: React.FC<{
         }}
       />
 
-      {/* IMAGEM SOBRE O VÍDEO */}
+      {/* ÁUDIO */}
+      <Audio
+        src={staticFile("/audios/musica-nova.mp3")}
+        volume={interpolate(
+          frame,
+          [
+            0,                  // início do vídeo
+            fps * 2,            // após 2 segundos (fade-in termina)
+            durationInFrames - fps * 2,  // começa fade-out 2 segundos antes do fim
+            durationInFrames    // final do vídeo
+          ],
+          [
+            0,  // volume 0 (início)
+            1,  // volume 100% após 2 segundos
+            1,  // mantém 100% até quase o fim
+            0   // volume 0 no fim (fade-out)
+          ],
+          {
+            extrapolateLeft: "clamp",
+            extrapolateRight: "clamp"
+          }
+        )}
+      />
+
+
+      {/* IMAGEM (aparece após 7 segundos) */}
       <img
         src={staticFile("/image/logo.png")}
         style={{
           position: "absolute",
           top: 0,
-          right: "center",
+          left: -420,
           width: 1920,
           height: "auto",
-          opacity: 0.3,
+          opacity: imageOpacity,
         }}
       />
 
-      {/* TEXTO: Nome e Título */}
+      {/* TEXTO (aparece apenas no final) */}
       <div
         style={{
           position: "absolute",
-          top: 30,
-          fontSize: 60,
+          top: 850,
+          fontSize: 150,
           color: "white",
           fontWeight: "bold",
-          backgroundColor: "rgba(0, 0, 0, 0)",
+          backgroundColor: "hsla(96, 100.00%, 38.00%, 0.00)",
           padding: "10px 20px",
           borderRadius: 15,
+          opacity: textOpacity,
         }}
       >
-        Número de embaixadinhas
+        MVP Studium
       </div>
 
-      {/* CONTADOR */}
+      {/* CONTADOR COM FUNDO DE BOLA */}
       <div
         style={{
           position: "absolute",
-          top: 200,
-          fontSize: 150,
-          color: "yellow",
+          top: 1700,
+          right: 50,
+          fontSize: 100,
+          color: "#5c6b74",
           fontWeight: "bold",
-          backgroundColor: "rgba(0, 0, 0, 0.5)",
-          padding: 20,
-          borderRadius: 20,
+          textShadow: "0 0 10px white, 0 0 10px white", 
+          backgroundImage: `url(${staticFile("/image/bola-atual.png")})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          width: 150,
+          height: 150,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          borderRadius: "50%",
           transform: `scale(${scale})`,
           opacity,
         }}
       >
         {count}
       </div>
+
     </AbsoluteFill>
   );
 };
