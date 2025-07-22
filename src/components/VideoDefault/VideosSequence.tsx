@@ -1,46 +1,48 @@
-import React from "react";
-import { AbsoluteFill, Sequence, Video } from "remotion";
-import { FadeTransition } from "../transitions/FadeTransition";
+import { AbsoluteFill, useCurrentFrame, interpolate } from 'remotion';
+import { PauseableVideo } from '../Youtube/PauseableVideo';
 
-type VideoItem = {
-  id: string;
-  src: string;
-  durationInFrames: number;
+
+
+
+type VideoSequencePlayerProps = {
+  videoUrls: string[];
+  durationInFramesPerVideo?: number;
+  pauseAtFrame?: number;
+  pauseDuration?: number;
+  zoomStartFrame?: number;
+  zoomEndFrame?: number;
 };
 
-type VideosSequenceProps = {
-  videos: VideoItem[];
-  fadeDurationInFrames?: number; // duração do fade, padrão 20
-};
-
-export const VideosSequence: React.FC<VideosSequenceProps> = ({
-  videos,
-  fadeDurationInFrames = 20,
+export const VideoSequencePlayer: React.FC<VideoSequencePlayerProps> = ({
+  videoUrls,
+  durationInFramesPerVideo = 150,
+  pauseAtFrame = 60,
+  pauseDuration = 30,
+  zoomStartFrame = 30,
+  zoomEndFrame = 90,
 }) => {
-  let fromFrame = 0;
+  const frame = useCurrentFrame();
+
+  const scale = interpolate(
+    frame,
+    [zoomStartFrame, zoomEndFrame],
+    [1, 2],
+    { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }
+  );
 
   return (
-    <AbsoluteFill>
-      {videos.map((video, index) => {
-        // Ajusta duração para incluir fade out do vídeo anterior
-        // Para o primeiro vídeo, não precisa ajustar o início
-        const videoStart = fromFrame;
-        fromFrame += video.durationInFrames;
-        console.log(index);
+    <AbsoluteFill style={{ backgroundColor: 'black' }}>
+      {videoUrls.map((videoUrl, index) => {
         return (
-          <Sequence
-            key={video.id}
-            from={videoStart}
-            durationInFrames={video.durationInFrames}
-          >
-            <FadeTransition durationInFrames={fadeDurationInFrames}>
-              <Video
-                src={video.src}
-                startFrom={0}
-                endAt={video.durationInFrames}
-              />
-            </FadeTransition>
-          </Sequence>
+          <PauseableVideo
+            src={videoUrl}
+            pauseFrame={580}
+            pauseDuration={45}
+            totalDuration={4500}
+            zoomStartFrame={100}
+            zoomEndFrame={200}
+          />
+
         );
       })}
     </AbsoluteFill>

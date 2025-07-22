@@ -52,6 +52,8 @@ export const YoutubeTemplate: React.FC<YoutubeTemplateProps> = ({
       <Sequence from={musicStartAtFrame}>
         <Audio src={staticFile("audios/music.mp3")} volume={0.8} />
       </Sequence>
+
+      
     </AbsoluteFill>
   );
 };
