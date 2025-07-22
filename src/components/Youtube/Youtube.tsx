@@ -16,42 +16,38 @@ type YoutubeTemplateProps = {
   coverDurationInFrames: number;
 };
 
+import { buildTimeline } from '../../utils/buildTimeline';
+
 export const YoutubeTemplate: React.FC<YoutubeTemplateProps> = ({
   scenes,
   musicStartAtFrame,
   coverStartFrame,
   coverDurationInFrames,
 }) => {
-  let fromFrame = 0;
+  const timeline = buildTimeline(scenes);
 
   return (
     <AbsoluteFill style={{ backgroundColor: "black" }}>
-      {scenes.map((scene) => {
-        const startAt = fromFrame;
-        fromFrame += scene.durationInFrames;
+      {timeline.map((scene) => (
+        <Sequence
+          key={scene.id}
+          from={scene.from}
+          durationInFrames={scene.durationInFrames}
+        >
+          <FadeTransition durationInFrames={20}>
+            {scene.component}
+          </FadeTransition>
+        </Sequence>
+      ))}
 
-        return (
-          <Sequence
-            key={scene.id}
-            from={startAt}
-            durationInFrames={scene.durationInFrames}
-          >
-            <FadeTransition durationInFrames={20}>
-              {scene.component}
-            </FadeTransition>
-          </Sequence>
-        );
-      })}
-
-      {/* Capa sobreposta antes do final da intro */}
       <Sequence from={coverStartFrame} durationInFrames={coverDurationInFrames}>
         <CoverDefault />
       </Sequence>
 
-      {/* Música sincronizada com a capa */}
       <Sequence from={musicStartAtFrame}>
         <Audio src={staticFile("audios/music.mp3")} volume={0.8} />
       </Sequence>
     </AbsoluteFill>
   );
 };
+

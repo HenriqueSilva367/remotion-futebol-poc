@@ -1,6 +1,7 @@
 import { AbsoluteFill, useCurrentFrame, interpolate } from 'remotion';
 import { PauseableVideo } from '../Youtube/PauseableVideo';
 
+
 type VideoSequencePlayerProps = {
   videoUrls: string[];
   durationInFramesPerVideo?: number;
@@ -30,12 +31,11 @@ export const VideoSequencePlayer: React.FC<VideoSequencePlayerProps> = ({
         return (
           <PauseableVideo
             src={videoUrl}
-            pauseFrame={580}
+            pauseFrame={270}
             pauseDuration={45}
             totalDuration={4500}
             zoomStartFrame={100}
-            zoomEndFrame={200}
-          />
+            zoomEndFrame={200} freezeFrame={0}          />
         );
       })}
     </AbsoluteFill>

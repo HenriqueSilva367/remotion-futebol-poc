@@ -1,61 +1,61 @@
-import { Sequence, AbsoluteFill, Video, useCurrentFrame, interpolate, Freeze } from 'remotion';
+import { Sequence, AbsoluteFill, Video, Freeze } from 'remotion';
+import { ZoomEffect } from '../transitions/ZoomEffect';
 
 type SplitVideoWithPauseProps = {
   src: string;
   pauseFrame: number;
   pauseDuration: number;
+  freezeFrame: number;
   totalDuration: number;
   zoomStartFrame: number;
   zoomEndFrame: number;
 };
 
-
 export const PauseableVideo: React.FC<SplitVideoWithPauseProps> = ({
   src,
   pauseFrame,
   pauseDuration,
+  freezeFrame,
   totalDuration,
   zoomStartFrame,
   zoomEndFrame,
 }) => {
-  const frame = useCurrentFrame();
-
-  const scale = interpolate(
-    frame,
-    [zoomStartFrame, zoomEndFrame],
-    [1, 2],
-    { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }
-  );
-
-  const videoStyle = {
-    width: '100%',
-    height: '100%',
-    objectFit: 'cover' as const,
-    transform: `scale(${scale})`,
-    transformOrigin: 'center center',
-  };
-
   return (
     <AbsoluteFill style={{ position: 'relative' }}>
-      {/* Vídeo contínuo */}
-      <Video
-        src={src}
-        volume={0}
-        style={videoStyle}
-      />
+      <ZoomEffect
+        zoomStartFrame={zoomStartFrame}
+        zoomEndFrame={zoomEndFrame}
+        zoomFrom={1}
+        zoomTo={2}
+      >
+        <Video
+          src={src}
+          volume={0}
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+        />
+      </ZoomEffect>
 
-      {/* Sequence que aparece no timeline */}
-      <Sequence from={170} durationInFrames={100} name="Pausa Visual">
-        <Freeze frame={202}>
+      <Sequence from={pauseFrame} durationInFrames={pauseDuration}>
+        <ZoomEffect
+          zoomStartFrame={zoomStartFrame}
+          zoomEndFrame={zoomEndFrame}
+          zoomFrom={1}
+          zoomTo={2}
+        >
+          <Freeze frame={freezeFrame}>
           <Video
-            src={src}
-            volume={0}
-            startFrom={230}     // Força o vídeo a começar no frame 202 interno
-            style={videoStyle}
-          />
-        </Freeze>
-      </Sequence>
+              src={src}
+              startFrom={freezeFrame}
+              volume={0}
+              onError={(error) => {
+                console.error('Erro no vídeo Freeze:', error);
+              }}
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+            />
 
+          </Freeze>
+        </ZoomEffect>
+      </Sequence>
     </AbsoluteFill>
   );
 };
