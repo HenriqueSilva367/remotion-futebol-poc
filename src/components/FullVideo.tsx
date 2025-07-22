@@ -82,50 +82,49 @@ export const FinalVideo: React.FC = () => {
     "/videos/07.mp4",
   ];
 
-  const showScoreboardFrame = 21 * fps;             // 21 segundos
-  const updateScoreFrame = (1 * 60 + 12) * fps;     // 1 minuto e 11 segundos
-  const hideScoreboardFrame = (1 * 60 + 21) * fps;  
+  const showScoreboardFrame = 21 * fps; // 21 segundos
+  const updateScoreFrame = (1 * 60 + 12) * fps; // 1 minuto e 11 segundos
+  const hideScoreboardFrame = (1 * 60 + 21) * fps;
   const leftScore = 2;
-
 
   const rightScore = frame >= updateScoreFrame ? 4 : 3;
   const frameGlobal = useCurrentFrame();
-  
-  const logoAppearFrame = (1 * 60 + 30) * fps;  // 1m28s
-  const fadeDuration = 3 * fps;                  // 3 segundos
+
+  const logoAppearFrame = (1 * 60 + 30) * fps; // 1m28s
+  const fadeDuration = 3 * fps; // 3 segundos
   const textAppearFrame = logoAppearFrame + fadeDuration;
 
-
-
-  const confettiEndFrame = 88 * fps;   // 1:28 em frames
+  const confettiEndFrame = 88 * fps; // 1:28 em frames
   const confettiStartFrame = 81 * fps; // 1:21 em frames
-  const confettiDuration = 7 * fps;    // duração 7 segundos (até 1:28)
+  const confettiDuration = 7 * fps; // duração 7 segundos (até 1:28)
 
   let accumulatedFrames = 0;
-  
+
   const showScoreboard =
-  frameGlobal >= showScoreboardFrame && frameGlobal < hideScoreboardFrame;
-  const showPlayerStats =
-  frameGlobal >= graphStart && frameGlobal <= graphEnd;
+    frameGlobal >= showScoreboardFrame && frameGlobal < hideScoreboardFrame;
+  const showPlayerStats = frameGlobal >= graphStart && frameGlobal <= graphEnd;
 
   const opacity = interpolate(
     frameGlobal,
     [confettiStartFrame, confettiEndFrame - 30, confettiEndFrame], // fade começa 1s antes do fim (30 frames)
     [1, 1, 0], // opacidade permanece 1 até começar o fade para 0
-    { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+    { extrapolateLeft: "clamp", extrapolateRight: "clamp" },
   );
 
-  
   return (
     <AbsoluteFill style={{ backgroundColor: "black" }}>
       <Audio src={staticFile("/audios/musica-nova.mp3")} />
 
       {/* seu conteúdo aqui */}
-      {frameGlobal >= confettiStartFrame && frameGlobal <= confettiStartFrame + confettiDuration && (
-      <Confetti startFrame={confettiStartFrame} durationInFrames={confettiDuration} />
-    )}
+      {frameGlobal >= confettiStartFrame &&
+        frameGlobal <= confettiStartFrame + confettiDuration && (
+          <Confetti
+            startFrame={confettiStartFrame}
+            durationInFrames={confettiDuration}
+          />
+        )}
 
-  {videos.map((videoSrc, index) => {
+      {videos.map((videoSrc, index) => {
         const durationInFrames = videoDurations[index] * fps;
         const startFrame = accumulatedFrames;
 
@@ -148,9 +147,7 @@ export const FinalVideo: React.FC = () => {
               durationInFrames={5 * fps}
             />
 
-            {index === 0 && (
-              <JugglingCounter totalJuggles={100} />
-            )}
+            {index === 0 && <JugglingCounter totalJuggles={100} />}
 
             {/* ✅ Placar controlado globalmente */}
             {showScoreboard && (
@@ -176,7 +173,7 @@ export const FinalVideo: React.FC = () => {
         );
       })}
       {showPlayerStats && (
-      <PlayerStatsPanel
+        <PlayerStatsPanel
           playerName="Pablo Veloso"
           goals={27}
           isTopScorer={true}
@@ -189,8 +186,15 @@ export const FinalVideo: React.FC = () => {
         />
       )}
 
-      <LogoFadeIn appearFrame={logoAppearFrame} durationInFrames={fadeDuration} />
-      <TextFadeIn appearFrame={textAppearFrame} durationInFrames={fadeDuration} text="MVP Studium" />
+      <LogoFadeIn
+        appearFrame={logoAppearFrame}
+        durationInFrames={fadeDuration}
+      />
+      <TextFadeIn
+        appearFrame={textAppearFrame}
+        durationInFrames={fadeDuration}
+        text="MVP Studium"
+      />
     </AbsoluteFill>
   );
 };
