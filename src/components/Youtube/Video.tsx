@@ -1,9 +1,9 @@
 import { IntroVideo } from "../VideoDefault/IntroVideo";
 import { CoverDefault } from "../VideoDefault/CoverDefault";
 import { YoutubeTemplate } from "./Youtube";
-import { Video, staticFile } from "remotion";
+import { staticFile } from "remotion";
 import { videoConfig } from "../../config/videoConfig";
-import { ZoomEffect } from "../transitions/ZoomEffect";
+
 import { PauseableVideo } from "./PauseableVideo";
 
 export const Videos: React.FC = () => {
@@ -15,16 +15,20 @@ export const Videos: React.FC = () => {
       <PauseableVideo
         key={cut.id}
         src={staticFile(cut.src)}
-        pauseFrame={cut.pause?.timelineFrame ?? 0}        // pega do config, ou 0 se não existir
-        pauseDuration={cut.pause?.duration ?? 60}          // idem
-        freezeFrame={cut.pause?.freezeFrame ?? 0}          // idem
+        startFrom={cut.startFrom ?? 0}
+        pauseFrame={cut.pause?.timelineFrame ?? 0}
+        pauseDuration={cut.pause?.duration ?? 0}
+        freezeFrame={cut.pause?.freezeFrame ?? 0}
         totalDuration={cut.durationInFrames}
-        zoomStartFrame={videoConfig.zoom.startFrame}
-        zoomEndFrame={videoConfig.zoom.endFrame}
+        zoomStartFrame={cut.zoom?.startFrame ?? 0}
+        zoomEndFrame={cut.zoom?.endFrame ?? (cut.zoom?.startFrame ?? 0) + 1} 
+        zoomFrom={cut.zoom?.from ?? 1}
+        zoomTo={cut.zoom?.to ?? 1}
       />
     ),
     durationInFrames: cut.durationInFrames,
   }));
+  
 
   const scenes = [
     {
