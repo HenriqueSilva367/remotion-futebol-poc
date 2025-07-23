@@ -31,25 +31,25 @@ export const videoConfig = {
         id: 'clip-1',
         src: '/videos/gol.mp4',
         startFrom: 0,
-        durationInFrames: 300,
+        durationInFrames: 210,
   
         pause: {
-          timelineFrame: 100,    // onde na timeline global inicia a pausa
+          timelineFrame: 165,    // onde na timeline global inicia a pausa
           duration: 45,          // duração da pausa em frames
-          freezeFrame: 150,      // frame específico do vídeo a ser congelado
+          freezeFrame: 225,      // frame específico do vídeo a ser congelado
+        },
+        zoom: {
+          from: 1,
+          to: 2,
+          startFrame: 100,
+          endFrame: 200,
         },
       },
       {
         id: 'clip-2',
         src: '/videos/gol.mp4',
-        startFrom: 450,
-        durationInFrames: 600,
-  
-        pause: {
-          timelineFrame: 200,   // pode ser qualquer ponto da timeline global
-          duration: 60,
-          freezeFrame: 500,
-        },
+        startFrom: 159,
+        durationInFrames: 400,
       },
     ],
   };
