@@ -1,35 +1,40 @@
-import React from 'react';
-import { useCurrentFrame, interpolate } from 'remotion';
+import { useCurrentFrame, interpolate, spring } from 'remotion';
+import { ReactNode } from 'react';
 
 type ZoomEffectProps = {
-  children: React.ReactNode;
+  zoomFrom: number;
+  zoomTo: number;
   zoomStartFrame: number;
   zoomEndFrame: number;
-  zoomFrom?: number;
-  zoomTo?: number;
+  children: ReactNode;
 };
 
 export const ZoomEffect: React.FC<ZoomEffectProps> = ({
-  children,
+  zoomFrom,
+  zoomTo,
   zoomStartFrame,
   zoomEndFrame,
-  zoomFrom = 1,
-  zoomTo = 2,
+  children,
 }) => {
   const frame = useCurrentFrame();
 
-  const scale = interpolate(
+  const progress = interpolate(
     frame,
     [zoomStartFrame, zoomEndFrame],
-    [zoomFrom, zoomTo],
-    { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }
+    [0, 1],
+    {
+      extrapolateLeft: 'clamp',
+      extrapolateRight: 'clamp',
+    }
   );
+
+  const scale = interpolate(progress, [0, 1], [zoomFrom, zoomTo]);
 
   return (
     <div
       style={{
         transform: `scale(${scale})`,
-        transformOrigin: 'center center',
+        transformOrigin: 'center',
         width: '100%',
         height: '100%',
       }}
