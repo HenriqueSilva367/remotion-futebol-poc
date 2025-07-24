@@ -3,68 +3,83 @@ import { ZoomEffect } from '../transitions/ZoomEffect';
 
 type SplitVideoWithPauseProps = {
   src: string;
-  pauseFrame: number;
-  pauseDuration: number;
-  startFrom: number;
-  freezeFrame: number;
-  totalDuration: number;
-  zoomStartFrame: number;
-  zoomEndFrame: number;
-  zoomFrom: number;
-  zoomTo: number;
+  pauseFrame?: number;
+  pauseDuration?: number;
+  startFrom?: number;
+  freezeFrame?: number;
+  totalDuration?: number;
+  zoomStartFrame?: number;
+  zoomEndFrame?: number;
+  zoomFrom?: number;
+  zoomTo?: number;
+  zoomPauseFrom?: number;
+  zoomPauseTo?: number;
 };
-
 
 export const PauseableVideo: React.FC<SplitVideoWithPauseProps> = ({
   src,
-  pauseFrame,
-  pauseDuration,
-  startFrom,
-  freezeFrame,
+  pauseFrame = 0,
+  pauseDuration = 0,
+  startFrom = 0,
+  freezeFrame = 0,
   zoomStartFrame,
   zoomEndFrame,
-  zoomFrom,
-  zoomTo
+  zoomFrom = 1,
+  zoomTo = 1,
+  zoomPauseFrom = 1,
+  zoomPauseTo = 1,
 }) => {
+  const hasZoom = zoomStartFrame !== undefined && zoomEndFrame !== undefined && zoomFrom !== zoomTo;
+
   return (
     <AbsoluteFill style={{ position: 'relative' }}>
-      {/* Vídeo normal com zoom animado */}
-      <ZoomEffect
-        zoomStartFrame={zoomStartFrame}
-        zoomEndFrame={zoomEndFrame}
-        zoomFrom={zoomFrom}
-        zoomTo={zoomTo}
-      >
-
+      {/* Vídeo principal com zoom animado (se configurado) */}
+      {hasZoom ? (
+        <ZoomEffect
+          zoomStartFrame={zoomStartFrame!}
+          zoomEndFrame={zoomEndFrame!}
+          zoomFrom={zoomFrom}
+          zoomTo={zoomTo}
+          startFrom={startFrom}
+        >
+          <Video
+            src={src}
+            startFrom={startFrom}
+            volume={0}
+            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+          />
+        </ZoomEffect>
+      ) : (
         <Video
           src={src}
           startFrom={startFrom}
           volume={0}
           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
         />
-      </ZoomEffect>
+      )}
 
-      {/* Pausa congelada com o mesmo zoom aplicado */}
+      {/* Pausa congelada com zoom fixo, se configurado */}
       {pauseDuration > 0 && (
         <Sequence from={pauseFrame} durationInFrames={pauseDuration}>
-         <ZoomEffect
-            zoomStartFrame={zoomStartFrame}
-            zoomEndFrame={zoomEndFrame}
-            zoomFrom={zoomFrom}
-            zoomTo={zoomTo}
-          >
-            <Freeze frame={freezeFrame}>
+          <Freeze frame={freezeFrame}>
+            <div
+              style={{
+                width: `${zoomPauseTo * 100}%`,
+                height: `${zoomPauseTo * 100}%`,
+                transformOrigin: 'center',
+                position: 'absolute',
+                top: `${-(zoomPauseTo - 1) * 50}%`,
+                left: `${-(zoomPauseTo - 1) * 50}%`,
+              }}
+            >
               <Video
                 src={src}
                 startFrom={freezeFrame}
                 volume={0}
-                onError={(error) => {
-                  console.error('Erro no vídeo Freeze:', error);
-                }}
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               />
-            </Freeze>
-          </ZoomEffect>
+            </div>
+          </Freeze>
         </Sequence>
       )}
     </AbsoluteFill>
