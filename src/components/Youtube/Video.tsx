@@ -1,34 +1,40 @@
-import { IntroVideo } from "../VideoDefault/IntroVideo";
-import { CoverDefault } from "../VideoDefault/CoverDefault";
-import { YoutubeTemplate } from "./Youtube";
-import { staticFile } from "remotion";
-import { videoConfig } from "../../config/videoConfig";
+'use client'
+import { IntroVideo } from "../VideoDefault/IntroVideo"
+import { CoverDefault } from "../VideoDefault/CoverDefault"
+import { YoutubeTemplate } from "./Youtube"
+import { staticFile } from "remotion"
+import { videoConfig } from "../../config/videoConfig"
 
-import { PauseableVideo } from "./PauseableVideo";
+import { PauseableVideo } from "./PauseableVideo"
 
 export const Videos: React.FC = () => {
-  const { intro, cover } = videoConfig.durations;
+  const { intro, cover } = videoConfig.durations
 
   const videoCutScenes = videoConfig.videoCuts.map((cut) => ({
     id: cut.id,
     component: (
       <PauseableVideo
-        key={cut.id}
-        src={staticFile(cut.src)}
-        startFrom={cut.startFrom ?? 0}
-        pauseFrame={cut.pause?.timelineFrame ?? 0}
-        pauseDuration={cut.pause?.duration ?? 0}
-        freezeFrame={cut.pause?.freezeFrame ?? 0}
-        totalDuration={cut.durationInFrames}
-        zoomStartFrame={cut.zoom?.startFrame ?? 0}
-        zoomEndFrame={cut.zoom?.endFrame ?? (cut.zoom?.startFrame ?? 0) + 1} 
-        zoomFrom={cut.zoom?.from ?? 1}
-        zoomTo={cut.zoom?.to ?? 1}
-      />
+      key={cut.id}
+      src={staticFile(cut.src)}
+      startFrom={cut.startFrom ?? 0}
+      totalDuration={cut.durationInFrames}
+      {...(cut.pause && {
+        pauseFrame: cut.pause.timelineFrame,
+        pauseDuration: cut.pause.duration,
+        freezeFrame: cut.pause.freezeFrame,
+        zoomPauseTo: cut.pause.zoomPauseTo,
+      })}
+      {...(cut.zoom && {
+        zoomStartFrame: cut.zoom.startFrame,
+        zoomEndFrame: cut.zoom.endFrame,
+        zoomFrom: cut.zoom.from,
+        zoomTo: cut.zoom.to,
+      })}
+    />
+    
     ),
     durationInFrames: cut.durationInFrames,
-  }));
-  
+  }))
 
   const scenes = [
     {
@@ -42,7 +48,7 @@ export const Videos: React.FC = () => {
       durationInFrames: cover,
     },
     ...videoCutScenes,
-  ];
+  ]
 
   return (
     <YoutubeTemplate
@@ -51,5 +57,5 @@ export const Videos: React.FC = () => {
       coverStartFrame={videoConfig.cover.startFrame}
       coverDurationInFrames={videoConfig.cover.durationInFrames}
     />
-  );
-};
+  )
+}
