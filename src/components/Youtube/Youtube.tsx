@@ -2,6 +2,10 @@ import React from "react";
 import { AbsoluteFill, Sequence, Audio, staticFile } from "remotion";
 import { FadeTransition } from "../transitions/FadeTransition";
 import { CoverDefault } from "../VideoDefault/CoverDefault";
+import { GifEffect } from "../transitions/GifEffect"; // named export
+
+import { buildTimeline } from "../../utils/buildTimeline";
+import { videoConfig } from "../../config/videoConfig"; // importa config
 
 type Scene = {
   id: string;
@@ -16,8 +20,6 @@ type YoutubeTemplateProps = {
   coverDurationInFrames: number;
 };
 
-import { buildTimeline } from '../../utils/buildTimeline';
-
 export const YoutubeTemplate: React.FC<YoutubeTemplateProps> = ({
   scenes,
   musicStartAtFrame,
@@ -28,6 +30,7 @@ export const YoutubeTemplate: React.FC<YoutubeTemplateProps> = ({
 
   return (
     <AbsoluteFill style={{ backgroundColor: "black" }}>
+      {/* SCENES */}
       {timeline.map((scene) => (
         <Sequence
           key={scene.id}
@@ -40,14 +43,21 @@ export const YoutubeTemplate: React.FC<YoutubeTemplateProps> = ({
         </Sequence>
       ))}
 
+      {/* COVER */}
       <Sequence from={coverStartFrame} durationInFrames={coverDurationInFrames}>
         <CoverDefault />
       </Sequence>
 
+      {/* AUDIO */}
       <Sequence from={musicStartAtFrame}>
         <Audio src={staticFile("audios/music.mp3")} volume={0.8} />
       </Sequence>
+
+      {/* EFEITOS GIF DINÂMICOS */}
+      {videoConfig.gifEffects?.map((effect, i) => (
+        <GifEffect key={i} {...effect} />
+      ))}
+
     </AbsoluteFill>
   );
 };
-

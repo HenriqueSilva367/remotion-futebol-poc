@@ -25,14 +25,12 @@ export const videoConfig = {
       src: '/videos/gol.mp4',
       startFrom: 0,
       durationInFrames: 210,
-
       pause: {
         timelineFrame: 165,
-        duration: 45,
+        duration: 60,
         freezeFrame: 225,
         zoomPauseTo: 2, 
       },
-
       zoom: {
         from: 1,
         to: 1.5,
@@ -52,5 +50,19 @@ export const videoConfig = {
         endFrame: 200,
       },
     },
+    
+  ],
+
+  // 👇 Novo: efeitos GIF globais
+  gifEffects: [
+    {
+      startFrame: 451,
+      durationInFrames: 60,
+      x: 710,
+      y: 130,
+      width: 250,
+      height: 450,
+    },
+    
   ],
 };

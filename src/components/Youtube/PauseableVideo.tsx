@@ -14,6 +14,7 @@ type SplitVideoWithPauseProps = {
   zoomTo?: number;
   zoomPauseFrom?: number;
   zoomPauseTo?: number;
+  pauseEffect?: string;
 };
 
 export const PauseableVideo: React.FC<SplitVideoWithPauseProps> = ({
