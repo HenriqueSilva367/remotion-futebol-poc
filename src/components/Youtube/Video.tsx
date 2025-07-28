@@ -10,31 +10,38 @@ import { PauseableVideo } from "./PauseableVideo"
 export const Videos: React.FC = () => {
   const { intro, cover } = videoConfig.durations
 
-  const videoCutScenes = videoConfig.videoCuts.map((cut) => ({
-    id: cut.id,
-    component: (
-      <PauseableVideo
-      key={cut.id}
-      src={staticFile(cut.src)}
-      startFrom={cut.startFrom ?? 0}
-      totalDuration={cut.durationInFrames}
-      {...(cut.pause && {
-        pauseFrame: cut.pause.timelineFrame,
-        pauseDuration: cut.pause.duration,
-        freezeFrame: cut.pause.freezeFrame,
-        zoomPauseTo: cut.pause.zoomPauseTo,
-      })}
-      {...(cut.zoom && {
-        zoomStartFrame: cut.zoom.startFrame,
-        zoomEndFrame: cut.zoom.endFrame,
-        zoomFrom: cut.zoom.from,
-        zoomTo: cut.zoom.to,
-      })}
-    />
-    
-    ),
-    durationInFrames: cut.durationInFrames,
-  }))
+  const videoCutScenes = videoConfig.videoCuts.map((cut, index) => {
+    const from = intro + cover + videoConfig.videoCuts
+      .slice(0, index)
+      .reduce((acc, curr) => acc + curr.durationInFrames, 0);
+  
+    return {
+      id: cut.id,
+      component: (
+        <PauseableVideo
+          key={cut.id}
+          src={staticFile(cut.src)}
+          startFrom={cut.startFrom ?? 0}
+          totalDuration={cut.durationInFrames}
+          timelineStartFrame={from} // <-- AQUI
+          {...(cut.pause && {
+            pauseFrame: cut.pause.timelineFrame,
+            pauseDuration: cut.pause.duration,
+            freezeFrame: cut.pause.freezeFrame,
+            zoomPauseTo: cut.pause.zoomPauseTo,
+          })}
+          {...(cut.zoom && {
+            zoomStartFrame: cut.zoom.startFrame,
+            zoomEndFrame: cut.zoom.endFrame,
+            zoomFrom: cut.zoom.from,
+            zoomTo: cut.zoom.to,
+          })}
+        />
+      ),
+      durationInFrames: cut.durationInFrames,
+    };
+  });
+  
 
   const scenes = [
     {
