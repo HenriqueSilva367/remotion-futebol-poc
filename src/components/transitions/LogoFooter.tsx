@@ -1,33 +1,40 @@
-import React from "react";
-import { Img, staticFile } from "remotion";
 
-type LogoProps = {
+import { Img, Sequence, staticFile } from 'remotion';
+
+type LogoFooterEffect = {
+  startFrame: number;
+  durationInFrames: number;
+  x?: number;
+  y?: number;
   width?: number;
   height?: number;
-  position?: "top-left" | "top-right" | "bottom-left" | "bottom-right";
 };
 
-export const Logo: React.FC<LogoProps> = ({
-  width = 150,
-  height = 150,
-  position = "top-right",
-}) => {
-  const positionStyles: Record<string, React.CSSProperties> = {
-    "top-left": { top: 20, left: 20 },
-    "top-right": { top: 20, right: 20 },
-    "bottom-left": { bottom: 20, left: 20 },
-    "bottom-right": { bottom: 20, right: 20 },
-  };
 
+export const LogoFooter: React.FC<LogoFooterEffect> = ({
+  startFrame,
+  durationInFrames,
+  x = 100,
+  y = 100,
+  width = 200,
+  height = 200,
+}) => {
   return (
-    <Img
-      src={staticFile("/image/MVP-HORIZONTAL.png")}
-      style={{
-        position: "absolute",
-        width,
-        height,
-        ...positionStyles[position],
-      }}
-    />
+    <Sequence from={startFrame} durationInFrames={durationInFrames}>
+      <Img
+        src={staticFile('/image/MVP-HORIZONTAL.png')}
+        width={width}
+        height={height}
+        style={{
+          position: 'absolute',
+          left: x,
+          top: y,
+          pointerEvents: 'none',
+        }}
+      />
+    </Sequence>
   );
 };
+
+
+  
