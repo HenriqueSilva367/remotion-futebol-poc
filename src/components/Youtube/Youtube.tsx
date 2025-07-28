@@ -6,12 +6,23 @@ import { GifEffect } from "../transitions/GifEffect"; // named export
 
 import { buildTimeline } from "../../utils/buildTimeline";
 import { videoConfig } from "../../config/videoConfig"; // importa config
+import { LogoFooter } from "../transitions/LogoFooter";
 
 type Scene = {
   id: string;
   component: React.ReactNode;
   durationInFrames: number;
 };
+
+type LogoFooterEffect = {
+  startFrame: number;
+  durationInFrames: number;
+  x?: number;
+  y?: number;
+  width?: number;
+  height?: number;
+};
+
 
 type YoutubeTemplateProps = {
   scenes: Scene[];
@@ -56,6 +67,10 @@ export const YoutubeTemplate: React.FC<YoutubeTemplateProps> = ({
       {/* EFEITOS GIF DINÂMICOS */}
       {videoConfig.gifEffects?.map((effect, i) => (
         <GifEffect key={i} {...effect} />
+      ))}
+
+      {videoConfig.logoFooters?.map((effect: LogoFooterEffect, i: number) => (
+        <LogoFooter key={i} {...effect} />
       ))}
 
     </AbsoluteFill>
