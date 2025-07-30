@@ -2,7 +2,7 @@ import React from "react";
 import { Audio, staticFile, Sequence } from "remotion";
 
 type BackgroundMusicProps = {
-  startAt: number; // Em frames
+  startAt: number; 
   volume?: number;
 };
 
