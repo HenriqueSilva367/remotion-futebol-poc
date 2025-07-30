@@ -1,29 +1,33 @@
 'use client'
-import { IntroVideo } from "../VideoDefault/IntroVideo"
-import { CoverDefault } from "../VideoDefault/CoverDefault"
-import { YoutubeTemplate } from "./Youtube"
-import { staticFile } from "remotion"
-import { videoConfig } from "../../config/videoConfig"
 
-import { PauseableVideo } from "./PauseableVideo"
+import { IntroVideo } from "../VideoDefault/IntroVideo";
+import { CoverDefault } from "../VideoDefault/CoverDefault";
+import { YoutubeTemplate } from "./Youtube";
+import { videoConfig } from "../../config/videoConfig";
+import { PauseableVideo } from "./PauseableVideo";
+import { resolveAssetPath } from "../../config/resolveAssetPath";
+
 
 export const Videos: React.FC = () => {
-  const { intro, cover } = videoConfig.durations
+  const { intro, cover } = videoConfig.durations;
 
   const videoCutScenes = videoConfig.videoCuts.map((cut, index) => {
-    const from = intro + cover + videoConfig.videoCuts
-      .slice(0, index)
-      .reduce((acc, curr) => acc + curr.durationInFrames, 0);
-  
+    const from =
+      intro +
+      cover +
+      videoConfig.videoCuts
+        .slice(0, index)
+        .reduce((acc, curr) => acc + curr.durationInFrames, 0);
+
     return {
       id: cut.id,
       component: (
         <PauseableVideo
           key={cut.id}
-          src={staticFile(cut.src)}
+          src={resolveAssetPath(cut.src)}
           startFrom={cut.startFrom ?? 0}
           totalDuration={cut.durationInFrames}
-          timelineStartFrame={from} // <-- AQUI
+          timelineStartFrame={from}
           {...(cut.pause && {
             pauseFrame: cut.pause.timelineFrame,
             pauseDuration: cut.pause.duration,
@@ -41,7 +45,6 @@ export const Videos: React.FC = () => {
       durationInFrames: cut.durationInFrames,
     };
   });
-  
 
   const scenes = [
     {
@@ -55,7 +58,7 @@ export const Videos: React.FC = () => {
       durationInFrames: cover,
     },
     ...videoCutScenes,
-  ]
+  ];
 
   return (
     <YoutubeTemplate
@@ -64,5 +67,5 @@ export const Videos: React.FC = () => {
       coverStartFrame={videoConfig.cover.startFrame}
       coverDurationInFrames={videoConfig.cover.durationInFrames}
     />
-  )
-}
+  );
+};

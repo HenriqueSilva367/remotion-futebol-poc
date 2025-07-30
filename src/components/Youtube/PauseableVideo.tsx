@@ -1,6 +1,12 @@
 'use client'
 
-import { AbsoluteFill, Freeze, Sequence, useCurrentFrame, Video, interpolate } from 'remotion'
+import {
+  AbsoluteFill,
+  Freeze,
+  useCurrentFrame,
+  Video,
+  interpolate,
+} from 'remotion'
 
 type PauseableVideoProps = {
   src: string
@@ -42,15 +48,10 @@ export const PauseableVideo: React.FC<PauseableVideoProps> = ({
     zoomEndFrame !== undefined &&
     zoomFrom !== undefined &&
     zoomTo !== undefined
-      ? interpolate(
-          frame,
-          [zoomStartFrame, zoomEndFrame],
-          [zoomFrom, zoomTo],
-          {
-            extrapolateLeft: 'clamp',
-            extrapolateRight: 'clamp',
-          }
-        )
+      ? interpolate(frame, [zoomStartFrame, zoomEndFrame], [zoomFrom, zoomTo], {
+          extrapolateLeft: 'clamp',
+          extrapolateRight: 'clamp',
+        })
       : 1
 
   const zoomScale = isInPause ? zoomPauseTo : animatedZoom
@@ -65,20 +66,18 @@ export const PauseableVideo: React.FC<PauseableVideoProps> = ({
 
   return (
     <AbsoluteFill style={{ position: 'relative' }}>
-      {/* Pausa com Freeze */}
       {isInPause && freezeFrame > 0 ? (
         <Freeze frame={freezeFrame}>
           <Video
-            src={src}
+            src={src} 
             startFrom={freezeFrame}
             volume={0}
             style={videoStyle}
           />
         </Freeze>
       ) : (
-        // Vídeo normal com zoom animado
         <Video
-          src={src}
+          src={src} 
           startFrom={startFrom}
           volume={0}
           style={videoStyle}

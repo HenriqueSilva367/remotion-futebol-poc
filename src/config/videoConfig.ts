@@ -22,7 +22,7 @@ export const videoConfig = {
   videoCuts: [
     {
       id: 'clip-1',
-      src: '/videos/gol.mp4',
+      src: 'videos/gol-01-h264.mp4',
       startFrom: 0,
       durationInFrames: 210,
       pause: {
@@ -40,7 +40,7 @@ export const videoConfig = {
     },
     {
       id: 'clip-2',
-      src: '/videos/gol.mp4',
+      src: 'videos/gol-01-h264.mp4',
       startFrom: 159,
       durationInFrames: 250,
       zoom: {
@@ -52,7 +52,7 @@ export const videoConfig = {
     },
     {
       id: 'clip-3',
-      src: '/videos/gol2.mp4',
+      src: 'videos/gol-02-h264.mp4',
       startFrom: 159,
       durationInFrames: 195,
       pause: {
@@ -70,7 +70,7 @@ export const videoConfig = {
     },
     {
       id: 'clip-4',
-      src: '/videos/gol2.mp4',
+      src: 'videos/gol-02-h264.mp4',
       startFrom: 295,
       durationInFrames: 300,
       zoom: {
@@ -82,7 +82,7 @@ export const videoConfig = {
     },
     {
       id: 'clip-5',
-      src: '/videos/lance.mp4',
+      src: 'videos/lance-05-h264.mp4',
       startFrom: 0,
       durationInFrames: 375,
       zoom: {
@@ -101,7 +101,7 @@ export const videoConfig = {
     },  
     {
       id: 'clip-6',
-      src: '/videos/golCabeca.mp4',
+      src: 'videos/gol-04-h264.mp4',
       startFrom: 0,
       durationInFrames: 129,
       pause: {
@@ -118,8 +118,8 @@ export const videoConfig = {
       },
     },
     {
-      id: 'clip-6',
-      src: '/videos/golCabeca.mp4',
+      id: 'clip-7',
+      src: 'videos/gol-04-h264.mp4',
       startFrom: 64,
       durationInFrames: 160,
       zoom: {
@@ -128,7 +128,37 @@ export const videoConfig = {
         startFrame: 100,
         endFrame: 200,
       },
-    },   
+    },
+    {
+      id: 'clip-8',
+      src: 'videos/gol-03-h264.mp4',
+      startFrom: 0,
+      durationInFrames: 125,
+      pause: {
+        timelineFrame: 65,
+        duration: 60,
+        freezeFrame: 32,
+        zoomPauseTo: 2, 
+      },
+      zoom: {
+        from: 2,
+        to: 1.5,
+        startFrame: 100,
+        endFrame: 200,
+      },
+    },
+    {
+      id: 'clip-8',
+      src: 'videos/gol-03-h264.mp4',
+      startFrom: 66,
+      durationInFrames: 200,
+      zoom: {
+        from: 2,
+        to: 1.5,
+        startFrame: 100,
+        endFrame: 200,
+      },
+    }, 
   ],
 
   gifEffects: [
@@ -161,6 +191,13 @@ export const videoConfig = {
       durationInFrames: 56,
       x: 1020,
       y: 145,
+      width: 400,
+      height: 600,
+    },    {
+      startFrame: 1974, 
+      durationInFrames: 56,
+      x: 650,
+      y: 85,
       width: 400,
       height: 600,
     }

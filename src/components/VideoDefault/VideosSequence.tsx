@@ -1,6 +1,5 @@
-import { AbsoluteFill, useCurrentFrame, interpolate } from 'remotion';
+import { AbsoluteFill, staticFile } from 'remotion';
 import { PauseableVideo } from '../Youtube/PauseableVideo';
-
 
 type VideoSequencePlayerProps = {
   videoUrls: string[];
@@ -13,29 +12,30 @@ type VideoSequencePlayerProps = {
 
 export const VideoSequencePlayer: React.FC<VideoSequencePlayerProps> = ({
   videoUrls,
-  zoomStartFrame = 30,
-  zoomEndFrame = 90,
+  durationInFramesPerVideo = 4500,
+  pauseAtFrame = 270,
+  pauseDuration = 45,
+  zoomStartFrame = 100,
+  zoomEndFrame = 200,
 }) => {
-  const frame = useCurrentFrame();
-
-  const scale = interpolate(
-    frame,
-    [zoomStartFrame, zoomEndFrame],
-    [1, 2],
-    { extrapolateLeft: 'clamp', extrapolateRight: 'clamp' }
-  );
-
   return (
     <AbsoluteFill style={{ backgroundColor: 'black' }}>
       {videoUrls.map((videoUrl, index) => {
+        // Se já começa com /static-, assume que está resolvido
+        const resolvedSrc = videoUrl.startsWith('/static-') ? videoUrl : staticFile(videoUrl);
+
         return (
           <PauseableVideo
-            src={videoUrl}
-            pauseFrame={270}
-            pauseDuration={45}
-            totalDuration={4500}
-            zoomStartFrame={100}
-            zoomEndFrame={200} freezeFrame={0}          />
+            key={index}
+            src={resolvedSrc}
+            pauseFrame={pauseAtFrame}
+            pauseDuration={pauseDuration}
+            totalDuration={durationInFramesPerVideo}
+            zoomStartFrame={zoomStartFrame}
+            zoomEndFrame={zoomEndFrame}
+            freezeFrame={0}
+            timelineStartFrame={0}
+          />
         );
       })}
     </AbsoluteFill>
