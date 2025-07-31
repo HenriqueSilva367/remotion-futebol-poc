@@ -1,18 +1,46 @@
 import React from "react";
-import { Audio, staticFile, Sequence } from "remotion";
+import {
+  Audio,
+  staticFile,
+  Sequence,
+  useCurrentFrame,
+  interpolate,
+} from "remotion";
 
 type BackgroundMusicProps = {
-  startAt: number; 
-  volume?: number;
+  src: string;
+  startAt: number;
+  durationInFrames: number;
+  fadeInDuration?: number;
+  fadeOutDuration?: number;
+  useFade?: boolean;
+  maxVolume?: number;
 };
 
 export const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
+  src,
   startAt,
-  volume = 1,
+  durationInFrames,
+  fadeInDuration = 30,
+  fadeOutDuration = 30,
+  useFade = true,
+  maxVolume = 1,
 }) => {
+  const frame = useCurrentFrame();
+  const relativeFrame = frame - startAt;
+
+  const volume = useFade
+    ? interpolate(
+        relativeFrame,
+        [0, fadeInDuration, durationInFrames - fadeOutDuration, durationInFrames],
+        [0, maxVolume, maxVolume, 0],
+        { extrapolateLeft: "clamp", extrapolateRight: "clamp" }
+      )
+    : maxVolume;
+
   return (
-    <Sequence from={startAt}>
-      <Audio src={staticFile("audios/music.mp3")} volume={volume} />
+    <Sequence from={startAt} durationInFrames={durationInFrames}>
+      <Audio src={staticFile(src)} volume={volume} />
     </Sequence>
   );
 };

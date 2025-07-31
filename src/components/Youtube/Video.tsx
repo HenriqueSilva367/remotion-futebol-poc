@@ -64,6 +64,7 @@ export const Videos: React.FC = () => {
     <YoutubeTemplate
       scenes={scenes}
       musicStartAtFrame={videoConfig.music.startFrame}
+      musicDuration={videoConfig.music.musicDuration}
       coverStartFrame={videoConfig.cover.startFrame}
       coverDurationInFrames={videoConfig.cover.durationInFrames}
     />

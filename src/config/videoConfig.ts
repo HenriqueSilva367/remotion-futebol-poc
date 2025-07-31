@@ -10,8 +10,13 @@ export const videoConfig = {
 
   music: {
     src: 'audios/music.mp3',
-    volume: 0.8,
-    startFrame: 177,
+    volume: 0.6,
+    startFrame: 120,
+    fadeInDuration: 30,
+    fadeOutDuration: 15,
+    useFade: true,
+    durationInFrames: 600, 
+    musicDuration: 2150       
   },
 
   cover: {
@@ -164,7 +169,7 @@ export const videoConfig = {
   gifEffects: [
     {
       startFrame: 454,
-      durationInFrames: 45,
+      durationInFrames: 41,
       x: 730,
       y: 130,
       width: 250,
