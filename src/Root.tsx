@@ -1,9 +1,8 @@
-// src/RemotionRoot.tsx
-
 import { Composition } from "remotion";
 import { MyComp } from "./components/MyComp";
 import { FinalVideo } from "./components/FullVideo";
 import { Videos } from "./components/Youtube/Video";
+import { VideosInstagram } from "./components/Instagram/VideosIntagram";
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -37,11 +36,12 @@ export const RemotionRoot: React.FC = () => {
 
       <Composition
         id="InstagramTemplate"
-        component={Videos}
+        component={VideosInstagram}
         durationInFrames={100 * 30}
         fps={30}
         width={1080}
         height={1920}
+        
       />
     </>
   );
