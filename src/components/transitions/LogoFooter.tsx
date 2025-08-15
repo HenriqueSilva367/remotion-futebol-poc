@@ -22,7 +22,7 @@ export const LogoFooter: React.FC<LogoFooterEffect> = ({
   return (
     <Sequence from={startFrame} durationInFrames={durationInFrames}>
       <Img
-        src={staticFile('/image/MVP-HORIZONTAL.png')}
+        src={staticFile('/image/LOGO_horizontal_branca.png')}
         width={width}
         height={height}
         style={{
@@ -35,6 +35,3 @@ export const LogoFooter: React.FC<LogoFooterEffect> = ({
     </Sequence>
   );
 };
-
-
-  
