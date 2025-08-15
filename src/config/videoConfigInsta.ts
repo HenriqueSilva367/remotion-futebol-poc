@@ -93,7 +93,7 @@ export const videoConfigInsta = {
       { src: "videos/escanteio2.mp4", startFrame: 89, durationInFrames: 70, blackAndWhite: false, volume: 0 },
       { src: "videos/escanteio3.mp4", startFrame: 160, durationInFrames: 150, blackAndWhite: false, volume: 0 },
     ],
-
+    // implementado... 
     // videoOverlays: [
     //   {
     //     startFrame: 0,
