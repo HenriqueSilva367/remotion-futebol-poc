@@ -22,14 +22,14 @@ export const videoConfigInsta = {
     },
   
     music: {
-      src: 'audios/cinematic-hip-hop.mp3',
-      volume: 0.6,
+      src: 'audios/hip-hop.mp3',
+      volume: 0.4,
       startFrame: 0,
       fadeInDuration: 30,
       fadeOutDuration: 15,
       useFade: true,
       durationInFrames: 600, 
-      musicDuration: 1340,      
+      musicDuration: 1470,      
     },
   
     videoCuts: [
@@ -106,11 +106,34 @@ export const videoConfigInsta = {
     //   }
     // ],
     
+
+    // dentro de videoConfigInsta
+videoOverlays: [
+  {
+    background: {
+      src: "videos/backgroundVideo.mp4",
+      startFrame: 0,
+      durationInFrames: 120,
+      volume: 0.5,
+    },
+    overlay: {
+      src: "videos/cruzamento.mp4",
+      startFrame: 0,
+      durationInFrames: 120,
+      x: 100,
+      y: 500,
+      width: 900,
+      height: 900,
+      volume: 1,
+    },
+  },
+],
+
     
     logoFooters: [   
       {
         startFrame: 90,
-        durationInFrames: 1000,
+        durationInFrames: 1380,
         x: 400,
         y: 1780,
         width: 340,
