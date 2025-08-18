@@ -7,6 +7,7 @@ import { resolveAssetPath } from "../../config/resolveAssetPath";
 import { BlackAndWhite } from "./components/BalckAndWhite";
 import { SlowMotionVideo } from "./components/SlowMotion";
 import { videoConfigInsta } from "../../config/videoConfigInsta";
+import { VideoWithOverlay } from "./components/VideoOverlay";
 
 type Scene = {
   id: string;
@@ -62,7 +63,26 @@ export const InstagramTemplate: React.FC<InstagramTemplateProps> = ({
         0
       )}
 
-   
+    
+        {videoConfigInsta.videoOverlays ?.map((overlayConfig, i) => {
+          const seqDuration = Math.max(
+            overlayConfig.background.durationInFrames,
+            overlayConfig.overlay.durationInFrames
+          );
+
+          const seq = (
+            <Sequence key={`overlay-${i}`} from={currentFrame} durationInFrames={seqDuration}>
+              <VideoWithOverlay
+                background={overlayConfig.background}
+                overlay={overlayConfig.overlay}
+              />
+            </Sequence>
+          );
+
+          currentFrame += seqDuration; 
+          return seq;
+        })}
+
       {videoConfigInsta.videoCuts.map((cut) => {
         const seq = (
           <Sequence
