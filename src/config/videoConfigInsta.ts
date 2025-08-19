@@ -67,7 +67,7 @@ export const videoConfigInsta = {
   Photos: [
     {
       src: "image/Fotografia.png",
-      startAt: 760,
+      startAt: 755,
       durationInFrames: 25,
       x: 0,
       y: 0,
@@ -206,7 +206,7 @@ export const videoConfigInsta = {
   texts: [
     {
       id: "intro-text",
-      text: "What happens on the field, stays in history!  ",
+      text: "What happens on the field, stays in history!",
       fontSize: 80,
       color: "#FFFFFF",
       durationInFrames: 110,
