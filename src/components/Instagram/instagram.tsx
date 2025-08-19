@@ -8,6 +8,8 @@ import { BlackAndWhite } from "./components/BalckAndWhite";
 import { SlowMotionVideo } from "./components/SlowMotion";
 import { videoConfigInsta } from "../../config/videoConfigInsta";
 import { VideoWithOverlay } from "./components/VideoOverlay";
+import { TheSoundCamera } from "./components/TheSoundCamera";
+import { ThePhoto } from "./components/ThePhoto";
 
 type Scene = {
   id: string;
@@ -141,6 +143,33 @@ export const InstagramTemplate: React.FC<InstagramTemplateProps> = ({
         currentFrame += cut.durationInFrames;
         return seq;
       })}
+
+      {videoConfigInsta.Photos?.map((photo, i) => (
+        <ThePhoto
+          key={`photo-${i}`}
+          src={photo.src}
+          startAt={photo.startAt}
+          durationInFrames={photo.durationInFrames}
+          x={photo.x}
+          y={photo.y}
+          width={photo.width}
+          height={photo.height}
+          opacity={photo.opacity}
+        />
+      ))}
+
+      {videoConfigInsta.SoundCameras?.map((sound, i) => (
+        <TheSoundCamera
+          key={`sound-${i}`}
+          src={sound.src}
+          startAt={sound.startAt}
+          durationInFrames={sound.durationInFrames}
+          fadeInDuration={sound.fadeInDuration}
+          fadeOutDuration={sound.fadeOutDuration}
+          useFade={sound.useFade}
+          maxVolume={sound.maxVolume}
+        />
+      ))}
 
       <Sequence from={musicStartAtFrame} durationInFrames={musicDuration}>
         <BackgroundMusic
